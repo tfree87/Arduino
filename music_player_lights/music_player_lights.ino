@@ -1,10 +1,8 @@
 /*
 
-Example sketch 09
+MUSIC PLAYER W/ LIGHTS
 
-BUZZER
-
-  Use the buzzer to play a song!
+Use the buzzer to play a song!
 
   The buzzer in your Inventor's Kit is an electromechanical
   component you can use to make noise. Inside the buzzer is a
@@ -98,8 +96,7 @@ int ledPins[] = {2,3,4,5,6,7,8,9};
 
 int tempo = 100;
 
-int currentLight = 0;
-int previousLight = 0;
+int light = 0;
 
 int index = 0;
 
@@ -107,11 +104,12 @@ void setup()
 {
   Serial.begin(9600);
   pinMode(buzzerPin, OUTPUT);
-  for(index = 0; index <= 7; index++)
+  for(index = 2; index <= 9; index++)
   {
-    pinMode(ledPins[index],OUTPUT);
+    pinMode(index,OUTPUT);
     // ledPins[index] is replaced by the value in the array.
     // For example, ledPins[0] is 2
+    digitalWrite(index, LOW);
   }
 }
 
@@ -131,25 +129,10 @@ void loop()
     else                          // otherwise, play the note
     {
       tone(buzzerPin, frequency(notes[i]), duration);
-      Serial.println(currentLight);
-      if (currentLight == 8) {
-        Serial.println("Set to 0");
-        currentLight = 0;
-      }
-      if (currentLight > 0) {
-        digitalWrite(ledPins[currentLight], HIGH);
-        previousLight = currentLight -1;
-        digitalWrite(ledPins[previousLight], LOW);
-      }
-      else {
-        Serial.println("Called");
-        digitalWrite(ledPins[currentLight], HIGH);
-        digitalWrite(ledPins[7], LOW);
-      }
-      currentLight = currentLight + 1;
-      Serial.println(currentLight);
+      digitalWrite(light, HIGH);
       delay(duration);            // wait for tone to finish
     }
+    digitalWrite(light, LOW);
     delay(tempo/10);              // brief pause between notes
   }
   
@@ -186,10 +169,12 @@ int frequency(char note)
   {
     if (names[i] == note)         // Is this the one?
     {
+      light = i + 2;
       return(frequencies[i]);     // Yes! Return the frequency
     }
   }
   return(0);  // We looked through everything and didn't find it,
               // but we still need to return a value, so return 0.
 }
+
 
